@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">RMDb</string>
+
+    <!-- Navigation Bar titles -->
+    <string name="characters">Characters</string>
+    <string name="episodes">Episodes</string>
+    <string name="locations">Locations</string>
+
+    <!--  -->
+
 </resources>
