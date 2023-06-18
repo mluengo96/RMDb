@@ -1,20 +1,21 @@
 package com.mluengo.rmdb.data.network.models
 
 import com.mluengo.rmdb.data.local.entitities.CharacterEntity
+import com.squareup.moshi.Json
 
 data class NetworkCharacter(
-    val id: Int,
-    val name: String,
-    val status: String,
-    val species: String,
-    val type: String,
-    val gender: String,
-    val origin: NetworkLocation,
-    val location: NetworkLocation,
-    val image: String,
-    val episode: List<String>,
-    val url: String,
-    val created: String,
+    @field:Json(name = "id") val id: Int,
+    @field:Json(name = "name") val name: String,
+    @field:Json(name = "status") val status: String,
+    @field:Json(name = "species") val species: String,
+    @field:Json(name = "type") val type: String,
+    @field:Json(name = "gender") val gender: String,
+    @field:Json(name = "origin") val origin: NetworkLocation,
+    @field:Json(name = "location") val location: NetworkLocation,
+    @field:Json(name = "image") val image: String,
+    @field:Json(name = "episode") val episode: List<String>,
+    @field:Json(name = "url") val url: String,
+    @field:Json(name = "created") val created: String,
 )
 
 /**

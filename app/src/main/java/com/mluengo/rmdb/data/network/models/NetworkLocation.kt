@@ -1,15 +1,16 @@
 package com.mluengo.rmdb.data.network.models
 
 import com.mluengo.rmdb.data.local.entitities.LocationEntity
+import com.squareup.moshi.Json
 
 data class NetworkLocation(
-    val id: Int,
-    val name: String,
-    val type: String,
-    val dimension: String,
-    val residents: List<String>,
-    val url: String,
-    val created: String,
+    @field:Json(name = "id") val id: Int,
+    @field:Json(name = "name") val name: String,
+    @field:Json(name = "type") val type: String,
+    @field:Json(name = "dimension") val dimension: String,
+    @field:Json(name = "residents") val residents: List<String>,
+    @field:Json(name = "url") val url: String,
+    @field:Json(name = "created") val created: String,
 )
 
 /**
