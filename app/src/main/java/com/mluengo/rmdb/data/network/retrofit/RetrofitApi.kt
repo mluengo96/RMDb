@@ -7,12 +7,12 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface RetrofitApi {
-    @GET("/character")
+    @GET("character")
     suspend fun getCharacters(): Response<NetworkCharacterResponse>
 
-    @GET("/episode")
+    @GET("episode")
     suspend fun getEpisodes(): Response<NetworkEpisodeResponse>
 
-    @GET("/location")
+    @GET("location")
     suspend fun getLocations(): Response<NetworkLocationResponse>
 }
