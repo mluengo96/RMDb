@@ -56,7 +56,7 @@ class RmdbAppState(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    val currentTopLevelDestination: RmdbDestination?
+    val currentRmdbDestination: RmdbDestination?
         @Composable get() = when (currentDestination?.route) {
             charactersNavigationRoute -> CHARACTERS
             episodesNavigationRoute -> EPISODES
