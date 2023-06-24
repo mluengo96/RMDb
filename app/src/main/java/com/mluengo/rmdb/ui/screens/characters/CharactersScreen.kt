@@ -1,14 +1,11 @@
 package com.mluengo.rmdb.ui.screens.characters
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
@@ -36,7 +33,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mluengo.rmdb.data.model.Character
-import com.mluengo.rmdb.ui.components.RmdbCircleProgressBar
 import com.mluengo.rmdb.ui.components.SkeletonLoader
 import com.mluengo.rmdb.ui.viewmodel.CharacterViewModel
 import com.mluengo.rmdb.ui.viewmodel.CharactersUiState
@@ -55,7 +51,6 @@ internal fun CharactersRoute(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun CharacterScreen(
     modifier: Modifier = Modifier,
@@ -93,40 +88,6 @@ internal fun CharacterScreen(
             else -> Unit
         }
     }
-
-    /*if (charactersUiState == Loading) {
-        RmdbCircleProgressBar()
-    } else {
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(128.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = modifier
-                .padding(16.dp)
-                .fillMaxSize()
-        ) {
-
-            when (charactersUiState) {
-                is Success -> {
-                    items(charactersUiState.characters, key = { it.id }) { characterResource ->
-                        SkeletonLoader(
-                            isLoading = charactersUiState is Loading,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                        ) {
-                            CharacterCard(
-                                character = characterResource,
-                                modifier = Modifier.wrapContentSize()//.animateItemPlacement()
-                            )
-                        }
-                    }
-                }
-
-                else -> Unit
-            }
-        }
-    }*/
 }
 
 @Composable
