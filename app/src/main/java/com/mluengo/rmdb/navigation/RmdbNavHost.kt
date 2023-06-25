@@ -7,9 +7,9 @@ import com.mluengo.rmdb.ui.RmdbAppState
 
 @Composable
 fun RmdbNavHost(
+    modifier: Modifier = Modifier,
     appState: RmdbAppState,
     startDestination: String = charactersNavigationRoute,
-    modifier: Modifier = Modifier,
 ) {
     val navController = appState.navController
     NavHost(
@@ -17,7 +17,8 @@ fun RmdbNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        charactersScreen()
+        charactersScreen(onNavigateToCharacter = appState::navigateToCharacterDetail)
+        characterDetailScreen()
         episodesScreen()
         locationsScreen()
     }

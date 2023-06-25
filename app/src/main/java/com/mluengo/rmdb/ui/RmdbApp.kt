@@ -24,12 +24,14 @@ fun RmdbApp(
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
         bottomBar = {
-            RmdbNavBar(
-                destinations = appState.rmdbDestinations,
-                currentDestination = appState.currentDestination,
-                onNavigateToDestination = appState::navigateToDestination,
-                modifier = Modifier.testTag("RMDbNavBar"),
-            )
+            if (appState.shouldShowNavBar) {
+                RmdbNavBar(
+                    destinations = appState.rmdbDestinations,
+                    currentDestination = appState.currentDestination,
+                    onNavigateToDestination = appState::navigateToDestination,
+                    modifier = Modifier.testTag("RMDbNavBar"),
+                )
+            }
         }
     ) { paddingValues ->
         Column(
@@ -47,7 +49,7 @@ fun RmdbApp(
                 )
             }
 
-            RmdbNavHost(appState)
+            RmdbNavHost(appState = appState)
         }
     }
 }

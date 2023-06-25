@@ -33,6 +33,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -112,7 +113,8 @@ fun Modifier.skeletonLoaderEffect() : Modifier = composed {
         }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview("Skeleton Loader", showBackground = true, device = Devices.PHONE)
+@Preview("Skeleton Loader (dark)", showBackground = true, uiMode = UI_MODE_NIGHT_YES, device = Devices.PHONE)
 @Composable
 fun SkeletonLoaderPreview() {
     LazyVerticalGrid(
@@ -127,7 +129,9 @@ fun SkeletonLoaderPreview() {
             SkeletonLoader(
                 isLoading = true
             ) {
-                CharacterScreen()
+                CharacterScreen(
+                    onNavigateToCharacter = { }
+                )
             }
         }
     }
@@ -140,6 +144,8 @@ fun SkeletonLoaderDarkPreview() {
     SkeletonLoader(
         isLoading = true
     ) {
-        CharacterScreen()
+        CharacterScreen(
+            onNavigateToCharacter = { }
+        )
     }
 }

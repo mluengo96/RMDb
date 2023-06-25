@@ -14,9 +14,9 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,11 +43,13 @@ import com.mluengo.rmdb.ui.viewmodel.CharactersUiState.Success
 internal fun CharactersRoute(
     modifier: Modifier = Modifier,
     viewModel: CharacterViewModel = hiltViewModel(),
+    onNavigateToCharacter: () -> Unit,
 ) {
     val charactersUiState: CharactersUiState by viewModel.characterUiState.collectAsStateWithLifecycle()
 
     CharacterScreen(
         charactersUiState = charactersUiState,
+        onNavigateToCharacter = onNavigateToCharacter,
     )
 }
 
@@ -55,6 +57,7 @@ internal fun CharactersRoute(
 internal fun CharacterScreen(
     modifier: Modifier = Modifier,
     charactersUiState: CharactersUiState? = null,
+    onNavigateToCharacter: () -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(128.dp),
@@ -70,7 +73,8 @@ internal fun CharacterScreen(
                 items(charactersUiState.characters, key = { it.id }) { characterResource ->
                     CharacterCard(
                         character = characterResource,
-                        modifier = Modifier.wrapContentSize()//.animateItemPlacement()
+                        modifier = Modifier.wrapContentSize(),
+                        onNavigateToCharacter = onNavigateToCharacter,
                     )
                 }
             }
@@ -94,13 +98,14 @@ internal fun CharacterScreen(
 fun CharacterCard(
     modifier: Modifier = Modifier,
     character: Character,
+    onNavigateToCharacter: () -> Unit,
 ) {
     val context = LocalContext.current
-    Card(
-        modifier = modifier.clickable {  },
-        shape = CardDefaults.shape,
-        colors = CardDefaults.cardColors(),
-        elevation = CardDefaults.cardElevation(2.dp),
+    OutlinedCard(
+        modifier = modifier.clickable { onNavigateToCharacter() },
+        shape = CardDefaults.outlinedShape,
+        colors = CardDefaults.outlinedCardColors(),
+        elevation = CardDefaults.outlinedCardElevation(),
     ) {
         Column(
             horizontalAlignment = Alignment.Start,

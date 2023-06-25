@@ -19,6 +19,7 @@ import com.mluengo.rmdb.navigation.RmdbDestination.LOCATIONS
 import com.mluengo.rmdb.navigation.charactersNavigationRoute
 import com.mluengo.rmdb.navigation.episodesNavigationRoute
 import com.mluengo.rmdb.navigation.locationsNavigationRoute
+import com.mluengo.rmdb.navigation.navigateToCharacterDetail
 import com.mluengo.rmdb.navigation.navigateToCharacters
 import com.mluengo.rmdb.navigation.navigateToEpisodes
 import com.mluengo.rmdb.navigation.navigateToLocations
@@ -80,6 +81,14 @@ class RmdbAppState(
      */
     val rmdbDestinations: List<RmdbDestination> = RmdbDestination.values().asList()
 
+    private val navBarRoutes = rmdbDestinations.map { it.route }
+    val shouldShowNavBar: Boolean
+        @Composable get() = currentDestination?.route in navBarRoutes
+
+    fun upPress() {
+        navController.navigateUp()
+    }
+
     /**
      * UI logic for navigating to a destination in the app. RMDb destinations have
      * only one copy of the destination of the back stack, and save and restore state whenever you
@@ -107,6 +116,24 @@ class RmdbAppState(
             EPISODES -> navController.navigateToEpisodes(topLevelNavOptions)
             LOCATIONS -> navController.navigateToLocations(topLevelNavOptions)
         }
+    }
+
+    fun navigateToCharacterDetail() {
+        val topLevelNavOptions = navOptions {
+            // Pop up to the start destination of the graph to
+            // avoid building up a large stack of destinations
+            // on the back stack as users select items
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            // Avoid multiple copies of the same destination when
+            // reselecting the same item
+            launchSingleTop = true
+            // Restore state when reselecting a previously selected item
+            restoreState = true
+        }
+
+        navController.navigateToCharacterDetail(topLevelNavOptions)
     }
 
     fun setShowSettingsDialog(shouldShow: Boolean) {
