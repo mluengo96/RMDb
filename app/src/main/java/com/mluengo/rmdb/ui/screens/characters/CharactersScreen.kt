@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
@@ -34,6 +35,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mluengo.rmdb.data.model.Character
 import com.mluengo.rmdb.ui.components.SkeletonLoader
+import com.mluengo.rmdb.ui.theme.spacingScheme
 import com.mluengo.rmdb.ui.viewmodel.CharacterViewModel
 import com.mluengo.rmdb.ui.viewmodel.CharactersUiState
 import com.mluengo.rmdb.ui.viewmodel.CharactersUiState.Loading
@@ -61,10 +63,10 @@ internal fun CharacterScreen(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(128.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacingScheme.medium),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacingScheme.medium),
         modifier = modifier
-            .padding(16.dp)
+            .padding(horizontal = MaterialTheme.spacingScheme.medium)
             .fillMaxSize()
     ) {
 
@@ -109,7 +111,7 @@ fun CharacterCard(
     ) {
         Column(
             horizontalAlignment = Alignment.Start,
-            modifier = modifier.padding(16.dp)
+            modifier = modifier.padding(MaterialTheme.spacingScheme.medium)
         ) {
             val imageUrl = character.image
             AsyncImage(
@@ -130,7 +132,7 @@ fun CharacterCard(
                 text = character.name,
                 style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
                 maxLines = 1,
-                modifier = modifier.padding(vertical = 8.dp),
+                modifier = modifier.padding(vertical = MaterialTheme.spacingScheme.small),
             )
 
             Row(

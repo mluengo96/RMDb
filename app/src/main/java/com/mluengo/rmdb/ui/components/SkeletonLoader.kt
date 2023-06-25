@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.mluengo.rmdb.ui.screens.characters.CharacterScreen
+import com.mluengo.rmdb.ui.theme.spacingScheme
 
 @Composable
 fun SkeletonLoader(
@@ -53,7 +55,7 @@ fun SkeletonLoader(
             elevation = CardDefaults.cardElevation(2.dp),
         ) {
             Column(
-                modifier = modifier.padding(16.dp)
+                modifier = modifier.padding(MaterialTheme.spacingScheme.medium)
             ) {
                 Box(
                     modifier = Modifier
@@ -119,10 +121,10 @@ fun Modifier.skeletonLoaderEffect() : Modifier = composed {
 fun SkeletonLoaderPreview() {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(128.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacingScheme.medium),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacingScheme.medium),
         modifier = Modifier
-            .padding(16.dp)
+            .padding(MaterialTheme.spacingScheme.medium)
             .fillMaxSize()
     ) {
         items(10) {
