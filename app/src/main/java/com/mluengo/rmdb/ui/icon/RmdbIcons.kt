@@ -1,6 +1,8 @@
 package com.mluengo.rmdb.ui.icon
 
 import androidx.annotation.DrawableRes
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.mluengo.rmdb.R
 
@@ -13,6 +15,8 @@ object RmdbIcons {
 
     val LocationsFilled = R.drawable.pin_drop_filled
     val LocationsBorder = R.drawable.pin_drop_border
+
+    val ArrowBack = Icons.Rounded.ArrowBack
 }
 
 sealed class Icon {

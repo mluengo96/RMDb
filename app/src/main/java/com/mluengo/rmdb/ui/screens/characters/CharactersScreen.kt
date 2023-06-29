@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
@@ -28,12 +28,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mluengo.rmdb.data.model.Character
+import com.mluengo.rmdb.data.model.CharacterLocation
 import com.mluengo.rmdb.ui.components.SkeletonLoader
 import com.mluengo.rmdb.ui.theme.spacingScheme
 import com.mluengo.rmdb.ui.viewmodel.CharacterViewModel
@@ -110,30 +114,44 @@ fun CharacterCard(
         elevation = CardDefaults.outlinedCardElevation(),
     ) {
         Column(
-            horizontalAlignment = Alignment.Start,
-            modifier = modifier.padding(MaterialTheme.spacingScheme.medium)
+            modifier = modifier
+                .padding(MaterialTheme.spacingScheme.medium)
         ) {
-            val imageUrl = character.image
-            AsyncImage(
-                model = ImageRequest.Builder(context)
-                    .data(imageUrl)
-                    .memoryCacheKey(imageUrl)
-                    .diskCacheKey(imageUrl)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                modifier = modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .requiredSize(128.dp),
-            )
+            ConstraintLayout(
+                modifier = modifier,
+            ) {
+                val (image, text) = createRefs()
+                val imageUrl = character.image
 
-            Text(
-                text = character.name,
-                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                maxLines = 1,
-                modifier = modifier.padding(vertical = MaterialTheme.spacingScheme.small),
-            )
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data(imageUrl)
+                        .memoryCacheKey(imageUrl)
+                        .diskCacheKey(imageUrl)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit,
+                    modifier = modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .constrainAs(image) { }
+                        .requiredSize(128.dp),
+                )
+
+                Text(
+                    text = character.name,
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = modifier
+                        .padding(vertical = MaterialTheme.spacingScheme.small)
+                        .fillMaxWidth(.7f)
+                        .constrainAs(text) {
+                            top.linkTo(image.bottom)
+                            start.linkTo(image.start)
+                        },
+                )
+            }
 
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -151,23 +169,40 @@ fun CharacterCard(
                 )
 
                 Text(
-                    text = character.status,
-                    style = MaterialTheme.typography.labelSmall,
-                    modifier = modifier.padding(start = 4.dp),
-                )
-
-                Text(
-                    text = "-",
-                    style = MaterialTheme.typography.labelSmall,
-                    modifier = modifier.padding(horizontal = 4.dp),
-                )
-
-                Text(
-                    text = character.species,
-                    style = MaterialTheme.typography.labelSmall,
-                    modifier = modifier,
+                    text = "${character.status} - ${character.species}",
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(start = 4.dp),
                 )
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CharacterCardPreview() {
+    CharacterCard(
+        character = Character(
+            type = "",
+            status = "Alive",
+            species = "Alien",
+            origin = CharacterLocation(
+                name = "",
+                url = "",
+            ),
+            location = CharacterLocation(
+                name = "",
+                url = "",
+            ),
+            url = "",
+            image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+            gender = "Male",
+            episode = listOf(),
+            created = "",
+            name = "Abadango Cluster",
+            id = 1,
+        ),
+        modifier = Modifier.wrapContentSize(),
+        onNavigateToCharacter = {  },
+    )
 }

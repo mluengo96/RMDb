@@ -18,7 +18,9 @@ fun RmdbNavHost(
         modifier = modifier,
     ) {
         charactersScreen(onNavigateToCharacter = appState::navigateToCharacterDetail)
-        characterDetailScreen()
+        characterDetailScreen(
+            onBackClick = navController::navigateUp
+        )
         episodesScreen()
         locationsScreen()
     }

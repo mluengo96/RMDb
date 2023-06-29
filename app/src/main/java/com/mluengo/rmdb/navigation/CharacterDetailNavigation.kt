@@ -12,8 +12,12 @@ fun NavController.navigateToCharacterDetail(navOptions: NavOptions? = null) {
     this.navigate(characterDetailNavigationRoute, navOptions)
 }
 
-fun NavGraphBuilder.characterDetailScreen() {
+fun NavGraphBuilder.characterDetailScreen(
+    onBackClick: () -> Unit,
+) {
     composable(route = characterDetailNavigationRoute) {
-        CharacterDetailRoute()
+        CharacterDetailRoute(
+            onBackClick = onBackClick
+        )
     }
 }
