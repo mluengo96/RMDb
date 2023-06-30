@@ -2,6 +2,8 @@ package com.mluengo.rmdb.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.mluengo.rmdb.data.model.Character
 import com.mluengo.rmdb.data.network.NetworkResult
 import com.mluengo.rmdb.data.network.asResult
@@ -12,7 +14,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed interface CharactersUiState {
@@ -34,6 +35,10 @@ class CharacterViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = CharactersUiState.Loading,
         )
+
+    val characterPagingFlow: Flow<PagingData<Character>> = characterRepository
+        .observePagingCharacters()
+        .cachedIn(viewModelScope)
 
     private fun charactersUiState(): Flow<CharactersUiState> {
         val charactersStream: Flow<List<Character>> = characterRepository.observeAllCharacters()

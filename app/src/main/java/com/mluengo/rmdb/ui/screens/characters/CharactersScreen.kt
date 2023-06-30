@@ -3,6 +3,7 @@ package com.mluengo.rmdb.ui.screens.characters
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,14 +14,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,37 +33,44 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mluengo.rmdb.data.model.Character
 import com.mluengo.rmdb.data.model.CharacterLocation
-import com.mluengo.rmdb.ui.components.SkeletonLoader
 import com.mluengo.rmdb.ui.theme.spacingScheme
-import com.mluengo.rmdb.ui.viewmodel.CharacterViewModel
-import com.mluengo.rmdb.ui.viewmodel.CharactersUiState
-import com.mluengo.rmdb.ui.viewmodel.CharactersUiState.Loading
-import com.mluengo.rmdb.ui.viewmodel.CharactersUiState.Success
 
 @Composable
 internal fun CharactersRoute(
-    modifier: Modifier = Modifier,
-    viewModel: CharacterViewModel = hiltViewModel(),
+    characters: LazyPagingItems<Character>,
     onNavigateToCharacter: () -> Unit,
 ) {
-    val charactersUiState: CharactersUiState by viewModel.characterUiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    LaunchedEffect(key1 = characters.loadState) {
+        if (characters.loadState.refresh is LoadState.Error) {
+            // TODO: Show Snackbar
+        }
+    }
 
-    CharacterScreen(
-        charactersUiState = charactersUiState,
-        onNavigateToCharacter = onNavigateToCharacter,
-    )
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (characters.loadState.refresh is LoadState.Loading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
+        } else {
+            CharacterScreen(
+                characters = characters,
+                onNavigateToCharacter = onNavigateToCharacter,
+            )
+        }
+    }
 }
 
 @Composable
 internal fun CharacterScreen(
     modifier: Modifier = Modifier,
-    charactersUiState: CharactersUiState? = null,
+    characters: LazyPagingItems<Character>,
     onNavigateToCharacter: () -> Unit,
 ) {
     LazyVerticalGrid(
@@ -74,28 +82,20 @@ internal fun CharacterScreen(
             .fillMaxSize()
     ) {
 
-        when (charactersUiState) {
-            is Success -> {
-                items(charactersUiState.characters, key = { it.id }) { characterResource ->
-                    CharacterCard(
-                        character = characterResource,
-                        modifier = Modifier.wrapContentSize(),
-                        onNavigateToCharacter = onNavigateToCharacter,
-                    )
-                }
+        items(characters.itemCount) { characterIndex ->
+            if (characters[characterIndex] != null) {
+                CharacterCard(
+                    character = characters[characterIndex]!!,
+                    modifier = Modifier.wrapContentSize(),
+                    onNavigateToCharacter = onNavigateToCharacter,
+                )
             }
+        }
 
-            Loading -> {
-                items(10) {
-                    SkeletonLoader(
-                        isLoading = charactersUiState is Loading,
-                    ) {
-
-                    }
-                }
+        item {
+            if (characters.loadState.append is LoadState.Loading) {
+                CircularProgressIndicator()
             }
-
-            else -> Unit
         }
     }
 }
